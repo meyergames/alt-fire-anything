@@ -6,7 +6,7 @@ mod_settings =
 {
     {
         category_id = "default_settings",
-        ui_name = "General",
+        ui_name = "",
         ui_description = "",
         settings = {
             {
@@ -16,26 +16,37 @@ mod_settings =
                 value_default = false,
                 scope = MOD_SETTING_SCOPE_NEW_GAME,
             },
-        },
+        }
+    },
+    {
         category_id = "experimental_settings",
         ui_name = "Experimental",
         ui_description = "",
         settings = {
             {
-                id = "scale_recharge_time_with_mana_cost",
-                ui_name = "Scale recharge time with mana cost",
-                ui_description = "Due to a technical limitation, the recharge time after using\nAlt Fire Everything does currently not consider the reload\ntimes of the spells it fires. As a workaround to make the\nreload time feel more natural, you can enable this option\nto scale the recharge time with the mana cost of the fired\nspells. When disabled, reload time defaults to 1 second.",
+                id = "shared_recharge_time",
+                ui_name = "Shared recharge time",
+                ui_description = "While using \"Alt Fire Anything\" with this setting enabled, your\nwand's normal and alt fire payloads share the same recharge time.",
                 value_default = true,
                 scope = MOD_SETTING_SCOPE_RUNTIME,
             },
-            -- {
-            --     id = "wrap_payload",
-            --     ui_name = "Wrap payload",
-            --     ui_description = "Due to another technical limitation, Alt Fire Everything\ncurrently incurs the mana cost of all spells that come after it.\nEnabling this setting may alleviate some of this.",
-            --     -- ui_description = "Due to a technical limitation, the recharge time after using\nAlt Fire Everything does currently not consider the reload\ntimes of the spells it fires. As a workaround to make the\nreload time feel more natural, you can enable this option\nto scale the recharge time with the mana cost of the fired\nspells. When disabled, reload time is always 1 second.",
-            --     value_default = true,
-            --     scope = MOD_SETTING_SCOPE_RUNTIME,
-            -- },
+            {
+                id = "mana_cost_to_recharge_time",
+                ui_name = "Mana cost : Recharge time",
+                ui_description = "How much the mana cost of alt-fired spells\naffects the recharge time of \"Alt Fire Anything\".",
+                value_default = 100,
+                value_min = 0,
+                value_max = 100,
+                value_display_formatting = " $0%",
+                scope = MOD_SETTING_SCOPE_RUNTIME,
+            },
+            {
+                id = "wrap_payload",
+                ui_name = "Wrap payload",
+                ui_description = "Makes \"Alt Fire Anything\" wrap around your wand's spell slots in search\nfor spells to add to its payload, at the cost of considerably more mana.",
+                value_default = false,
+                scope = MOD_SETTING_SCOPE_RUNTIME,
+            },
         },
     },
 }

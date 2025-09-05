@@ -2,7 +2,10 @@
 
 dofile_once("mods/Apotheosis/lib/apotheosis/apotheosis_utils.lua")
 
-local config_recharge_scales_with_mana = ModSettingGet("alt_fire_anything.scale_recharge_time_with_mana_cost")
+-- local config_recharge_scales_with_mana = ModSettingGet("alt_fire_anything.scale_recharge_time_with_mana_cost")
+local config_recharge_scales_with_mana = true
+local config_shared_recharge_time = ModSettingGet("alt_fire_anything.shared_recharge_time")
+local config_mana_cost_to_recharge_time = ModSettingGet("alt_fire_anything.mana_cost_to_recharge_time")
 local config_wrap_payload = ModSettingGet("alt_fire_anything.wrap_payload")
 
 local EZWand = dofile_once("mods/alt_fire_anything/files/scripts/lib/ezwand.lua")
@@ -31,7 +34,9 @@ if GameGetFrameNum() >= cooldown_frame then
 		local next_usable_frame = ComponentGetValue2( acomp, "mReloadNextFrameUsable" )
 		if ( GameGetFrameNum() < next_usable_frame ) then return end -- return if the wand is reloading
 
-		local afa_index = -1 -- this should technically be 999, but it seems to enable wrapping this way...! interesting.
+		local afa_index = 999
+		if config_wrap_payload then afa_index = -1 end -- this seems to enable wrapping... interesting!
+
 		local total_mana_drain = 0
         local spells, attached_spells = wand:GetSpells()
         for i,spell in ipairs( spells ) do
@@ -93,7 +98,12 @@ if GameGetFrameNum() >= cooldown_frame then
         -- 	GamePrint("new sequence: " .. #spell_sequence)
         -- end
 
-    	if ( spells_added - spells_before > 0 and wand.mana >= total_mana_drain ) then
+        local were_spells_added = spells_added > 0
+        if config_wrap_payload then
+        	were_spells_added = spells_added - spells_before > 0
+        end
+
+    	if ( were_spells_added and wand.mana >= total_mana_drain ) then
 			EZWand.ShootSpellSequenceInherit( spell_sequence, x+aim_x*12, y+aim_y*12, x+aim_x*20, y+aim_y*20, wand )
 			wand.mana = wand.mana - total_mana_drain
 
@@ -102,14 +112,17 @@ if GameGetFrameNum() >= cooldown_frame then
 			local wand_recharge_time = ComponentObjectGetValue2( acomp, "gun_config", "reload_time" )
 			local total_recharge_time = math.max( wand_recharge_time, 60 )
 			if config_recharge_scales_with_mana then
-				total_recharge_time = wand_recharge_time + ( total_mana_drain * 0.5 )
+				total_recharge_time = wand_recharge_time + ( total_mana_drain * config_mana_cost_to_recharge_time * 0.01 )
 			end
-	        ComponentSetValue2( acomp, "mNextFrameUsable", GameGetFrameNum() + total_recharge_time )
-	        ComponentSetValue2( acomp, "mReloadNextFrameUsable", GameGetFrameNum() + total_recharge_time )
-	        ComponentSetValue2( acomp, "mReloadFramesLeft", total_recharge_time )
-	        ComponentSetValue2( acomp, "reload_time_frames", total_recharge_time )
 
-			ComponentSetValue2( variablecomp, "value_int", GameGetFrameNum() + wand_recharge_time )
+			if config_shared_recharge_time then
+		        ComponentSetValue2( acomp, "mNextFrameUsable", GameGetFrameNum() + total_recharge_time )
+		        ComponentSetValue2( acomp, "mReloadNextFrameUsable", GameGetFrameNum() + total_recharge_time )
+		        ComponentSetValue2( acomp, "mReloadFramesLeft", total_recharge_time )
+		        ComponentSetValue2( acomp, "reload_time_frames", total_recharge_time )
+		    end
+
+			ComponentSetValue2( variablecomp, "value_int", GameGetFrameNum() + total_recharge_time )
 	        if HasFlagPersistent(actionid) == false then
 	            GameAddFlagRun(table.concat({"new_",actionid}))
 	            AddFlagPersistent(actionid)

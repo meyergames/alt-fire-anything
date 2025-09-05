@@ -20,12 +20,10 @@ if ( actions ~= nil and ModIsEnabled("Apotheosis") ) then
 									current_reload_time = current_reload_time - 10
 									
 									for i,v in ipairs( hand ) do
-										-- GamePrint( "mana cost of discarded hand card: " .. v.mana )
 										table.insert( discarded, v )
 									end
 									
 									for i,v in ipairs( deck ) do
-										-- GamePrint( "mana cost of discarded deck card: " .. v.mana )
 										table.insert( discarded, v )
 									end
 									
