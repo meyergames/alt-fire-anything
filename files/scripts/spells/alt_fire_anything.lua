@@ -20,6 +20,8 @@ if GameGetFrameNum() >= cooldown_frame then
         local mana = wand.mana
 
 		local spell_sequence = {}
+    	local spells_added = 0
+    	local spells_before = 0
 		local acomp = EntityGetFirstComponentIncludingDisabled( wand.entity_id, "AbilityComponent" )
 		local next_usable_frame = ComponentGetValue2( acomp, "mReloadNextFrameUsable" )
 		if ( GameGetFrameNum() < next_usable_frame ) then return end -- return if the wand is reloading
@@ -30,40 +32,47 @@ if GameGetFrameNum() >= cooldown_frame then
         for i,spell in ipairs( spells ) do
             if ( spell.action_id == "ALT_FIRE_ANYTHING" ) then
             	afa_index = i
+            	spells_before = afa_index - 1
             elseif ( i > afa_index ) then
-			    local spell_eid = spells[i].entity_id
-		        local spell_aid = spells[i].action_id
-
 		        local spell_data = nil
 				dofile_once( "data/scripts/gun/gun_actions.lua" )
 				for k,v in pairs( actions ) do
-					if ( v.id == "ALT_FIRE_ANYTHING" ) then
+					if ( v.id == spells[i].action_id ) then
 						spell_data = v
+						-- GamePrint( tostring(v.gunaction_config) ) -- would be nice to incur the correct cast delay and recharge time
+						-- after the alt-fire action, but getting those stats from the actions seems impossible as of my current understanding
 					end
 				end
 
-		        local icomp = EntityGetFirstComponentIncludingDisabled( spell_eid, "ItemComponent" )
+		        local icomp = EntityGetFirstComponentIncludingDisabled( spells[i].entity_id, "ItemComponent" )
 		        local uses_remaining = ComponentGetValue2( icomp, "uses_remaining" ) or -1
+
 		        if wand.mana >= total_mana_drain + spell_data.mana then
 		        	if ( uses_remaining ~= 0 ) then -- either it is -1 for infinite, or >0 for actual remaining uses
 		        		total_mana_drain = total_mana_drain + spell_data.mana
-		        		spell_sequence[i-afa_index] = spell_aid
+		        		spell_sequence[i-afa_index] = spells[i].action_id
+		        		spells_added = spells_added + 1
 
 			        	if uses_remaining > 0 then
 	                    	ComponentSetValue2( icomp, "uses_remaining", uses_remaining - 1 )
 	                    end
+                    else
+                    	break
 		        	end
+		        else
+        			GamePlaySound("data/audio/Desktop/items.bank", "magic_wand/not_enough_mana_for_action", x, y)
+		        	break
 		        end
 		    end
         end
 
-    	if ( wand.mana >= total_mana_drain ) then
+    	if ( spells_added - spells_before > 0 and wand.mana >= total_mana_drain ) then
 			EZWand.ShootSpellSequenceInherit( spell_sequence, x+aim_x*12, y+aim_y*12, x+aim_x*20, y+aim_y*20, wand )
 			wand.mana = wand.mana - total_mana_drain
 
 			-- local action_cast_delay = ComponentObjectGetValue2( acomp, "gunaction_config", "fire_rate_wait" )
 			-- local action_recharge_time = ComponentObjectGetValue2( acomp, "gunaction_config", "reload_time" )
-			local wand_recharge_time = ComponentObjectGetValue2( acomp, "gun_config", "reload_time" )
+			local wand_recharge_time = math.max( ComponentObjectGetValue2( acomp, "gun_config", "reload_time" ), 60 )
 			-- local total_recharge_time = action_recharge_time + wand_recharge_time
 	        ComponentSetValue2( acomp, "mNextFrameUsable", GameGetFrameNum() + wand_recharge_time )
 	        ComponentSetValue2( acomp, "mReloadNextFrameUsable", GameGetFrameNum() + wand_recharge_time )
@@ -77,9 +86,7 @@ if GameGetFrameNum() >= cooldown_frame then
 	        end
             -- if ModIsEnabled("quant.ew") then
             --     CrossCall("afa_ew_alt_fire", root, x, y, aim_x, aim_y, "???.xml")
-            -- end
-        else
-        	GamePlaySound("data/audio/Desktop/items.bank", "magic_wand/not_enough_mana_for_action", x, y)
+            -- end=
 	    end
     end
 end
