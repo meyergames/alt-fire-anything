@@ -10,16 +10,9 @@ mod_settings =
         ui_description = "",
         settings = {
             {
-                id = "auto_unlock",
-                ui_name = "Auto unlock",
-                ui_description = "Enables the spell to appear without unlocking it first.\nIt is unlocked by killing the Connoisseur of Wands.",
-                value_default = false,
-                scope = MOD_SETTING_SCOPE_NEW_GAME,
-            },
-            {
                 id = "spawn_at_start",
                 ui_name = "Spawn at start",
-                ui_description = "Spawns a copy of the spell at the mountain entrance.",
+                ui_description = "Spawns a copy of the spell at the mountain entrance.\nUseful if you just want to try it out.",
                 value_default = false,
                 scope = MOD_SETTING_SCOPE_NEW_GAME,
             },

@@ -1,17 +1,13 @@
 ModLuaFileAppend("data/scripts/gun/gun_actions.lua", "mods/alt_fire_anything/files/scripts/actions.lua")
-ModLuaFileAppend("data/entities/animals/boss_pit/boss_pit_death.lua", "mods/alt_fire_anything/files/entities/animals/boss_pit_death.lua")
-ModLuaFileAppend("data/scripts/animals/wand_ghost.lua", "mods/alt_fire_anything/files/scripts/animals/wand_ghost.lua")
-ModLuaFileAppend("data/scripts/biomes/wizardcare_entrance.lua", "mods/alt_fire_anything/files/scripts/biomes/wizardcave_entrance.lua")
 
--- local config_auto_unlock = ModSettingGet("alt_fire_anything.auto_unlock")
 local config_spawn_at_start = ModSettingGet("alt_fire_anything.spawn_at_start")
 
 function OnPlayerSpawned(player)
-    CreateItemActionEntity( "ALT_FIRE_ANYTHING", -4324, 3959 )
+    -- spawn a guaranteed "Alt Fire Anything" card in the orb room next to the early magical temple
+    CreateItemActionEntity( "ALT_FIRE_ANYTHING", -4324, 3859 )
 
-    if ( config_auto_unlock ) then
-        AddFlagPersistent( "card_unlocked_alt_fire_anything" )
-    elseif ( config_spawn_at_start ) then
+    -- if the player enabled this mod setting, also spawn a copy at the mountain entrance
+    if ( config_spawn_at_start ) then
         CreateItemActionEntity( "ALT_FIRE_ANYTHING", 800, -100 )
     end
 end
