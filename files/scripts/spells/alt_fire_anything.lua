@@ -3,6 +3,7 @@
 dofile_once("mods/Apotheosis/lib/apotheosis/apotheosis_utils.lua")
 
 local config_recharge_scales_with_mana = ModSettingGet("alt_fire_anything.scale_recharge_time_with_mana_cost")
+local config_wrap_payload = ModSettingGet("alt_fire_anything.wrap_payload")
 
 local EZWand = dofile_once("mods/alt_fire_anything/files/scripts/lib/ezwand.lua")
 local entity_id = GetUpdatedEntityID()
@@ -18,11 +19,10 @@ cooldown_frame = ComponentGetValue2( variablecomp, "value_int" )
 local aim_x, aim_y = ComponentGetValue2(controlscomp, "mAimingVectorNormalized")
 local manacost = 0
 
-local do_wrap = ModSettingGet("alt_fire_anything.wrap_payload")
-
 if GameGetFrameNum() >= cooldown_frame then
     if isButtonDown_AltFire() then
         local mana = wand.mana
+        local spells_left_to_add = wand.spellsPerCast
 
 		local spell_sequence = {}
     	local spells_added = 0
@@ -31,7 +31,7 @@ if GameGetFrameNum() >= cooldown_frame then
 		local next_usable_frame = ComponentGetValue2( acomp, "mReloadNextFrameUsable" )
 		if ( GameGetFrameNum() < next_usable_frame ) then return end -- return if the wand is reloading
 
-		local afa_index = -1
+		local afa_index = -1 -- this should technically be 999, but it seems to enable wrapping this way...! interesting.
 		local total_mana_drain = 0
         local spells, attached_spells = wand:GetSpells()
         for i,spell in ipairs( spells ) do
@@ -61,6 +61,21 @@ if GameGetFrameNum() >= cooldown_frame then
 			        	if uses_remaining > 0 then
 	                    	ComponentSetValue2( icomp, "uses_remaining", uses_remaining - 1 )
 	                    end
+
+				        ---- this was an attempt to add only the spells that can actually be cast to the virtual wand, so that
+				        ---- the total mana cost could be more accurate. alas...
+				        -- local spell_has_trigger = string.find( spell_data.id, "TRIGGER" )
+				        -- local spell_is_modifier = spell_data.type == ACTION_TYPE_MODIFIER
+				        -- local spell_is_multicast = spell_data.type == ACTION_TYPE_DRAW_MANY
+				        -- local spell_is_passive = spell_data.type == ACTION_TYPE_PASSIVE
+				        -- local spell_is_other = spell_data.type == ACTION_TYPE_OTHER
+				        -- if not ( spell_has_trigger or spell_is_modifier or spell_is_multicast or spell_is_passive or spell_is_other ) then
+				        -- 	spells_left_to_add = spells_left_to_add - 1
+				        -- 	if spells_left_to_add <= 0 then
+				        -- 		GamePrint("BREAK")
+				        -- 		break
+				        -- 	end
+				        -- end
                     else
                     	break
 		        	end
@@ -71,15 +86,12 @@ if GameGetFrameNum() >= cooldown_frame then
 		    end
         end
 
-        -- for k,v in pairs(spell_sequence) do
-        -- 	GamePrint( v )
- 	   	-- end
-        if not do_wrap and #spell_sequence > spells_added then
-        	local seq_length = #spell_sequence
-        	GamePrint("old sequence: " .. seq_length .. "  |  spells_before: " .. spells_before)
-        	spell_sequence = { unpack( spell_sequence, 1, seq_length - spells_before ) }
-        	GamePrint("new sequence: " .. #spell_sequence)
-        end
+        -- if not config_wrap_payload and #spell_sequence > spells_added then
+        -- 	local seq_length = #spell_sequence
+        -- 	GamePrint("old sequence: " .. seq_length .. "  |  spells_before: " .. spells_before)
+        -- 	spell_sequence = { unpack( spell_sequence, 1, seq_length - spells_before ) }
+        -- 	GamePrint("new sequence: " .. #spell_sequence)
+        -- end
 
     	if ( spells_added - spells_before > 0 and wand.mana >= total_mana_drain ) then
 			EZWand.ShootSpellSequenceInherit( spell_sequence, x+aim_x*12, y+aim_y*12, x+aim_x*20, y+aim_y*20, wand )
@@ -92,7 +104,6 @@ if GameGetFrameNum() >= cooldown_frame then
 			if config_recharge_scales_with_mana then
 				total_recharge_time = wand_recharge_time + ( total_mana_drain * 0.5 )
 			end
-			GamePrint("recharge time: " .. total_recharge_time)
 	        ComponentSetValue2( acomp, "mNextFrameUsable", GameGetFrameNum() + total_recharge_time )
 	        ComponentSetValue2( acomp, "mReloadNextFrameUsable", GameGetFrameNum() + total_recharge_time )
 	        ComponentSetValue2( acomp, "mReloadFramesLeft", total_recharge_time )

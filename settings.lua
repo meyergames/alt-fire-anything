@@ -28,14 +28,14 @@ mod_settings =
                 value_default = true,
                 scope = MOD_SETTING_SCOPE_RUNTIME,
             },
-            {
-                id = "wrap_payload",
-                ui_name = "Wrap payload",
-                ui_description = "Due to another technical limitation, Alt Fire Everything currently\nincurs the mana cost of all spells that come after it.\nEnabling this setting may alleviate some of this.",
-                -- ui_description = "Due to a technical limitation, the recharge time after using\nAlt Fire Everything does currently not consider the reload\ntimes of the spells it fires. As a workaround to make the\nreload time feel more natural, you can enable this option\nto scale the recharge time with the mana cost of the fired\nspells. When disabled, reload time is always 1 second.",
-                value_default = true,
-                scope = MOD_SETTING_SCOPE_RUNTIME,
-            },
+            -- {
+            --     id = "wrap_payload",
+            --     ui_name = "Wrap payload",
+            --     ui_description = "Due to another technical limitation, Alt Fire Everything\ncurrently incurs the mana cost of all spells that come after it.\nEnabling this setting may alleviate some of this.",
+            --     -- ui_description = "Due to a technical limitation, the recharge time after using\nAlt Fire Everything does currently not consider the reload\ntimes of the spells it fires. As a workaround to make the\nreload time feel more natural, you can enable this option\nto scale the recharge time with the mana cost of the fired\nspells. When disabled, reload time is always 1 second.",
+            --     value_default = true,
+            --     scope = MOD_SETTING_SCOPE_RUNTIME,
+            -- },
         },
     },
 }
