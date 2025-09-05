@@ -6,7 +6,7 @@ mod_settings =
 {
     {
         category_id = "default_settings",
-        ui_name = "",
+        ui_name = "General",
         ui_description = "",
         settings = {
             {
@@ -15,6 +15,26 @@ mod_settings =
                 ui_description = "Spawns a copy of the spell at the mountain entrance.\nUseful if you just want to try it out.",
                 value_default = false,
                 scope = MOD_SETTING_SCOPE_NEW_GAME,
+            },
+        },
+        category_id = "experimental_settings",
+        ui_name = "Experimental",
+        ui_description = "",
+        settings = {
+            {
+                id = "scale_recharge_time_with_mana_cost",
+                ui_name = "Scale recharge time with mana cost",
+                ui_description = "Due to a technical limitation, the recharge time after using\nAlt Fire Everything does currently not consider the reload\ntimes of the spells it fires. As a workaround to make the\nreload time feel more natural, you can enable this option\nto scale the recharge time with the mana cost of the fired\nspells. When disabled, reload time defaults to 1 second.",
+                value_default = true,
+                scope = MOD_SETTING_SCOPE_RUNTIME,
+            },
+            {
+                id = "wrap_payload",
+                ui_name = "Wrap payload",
+                ui_description = "Due to another technical limitation, Alt Fire Everything currently\nincurs the mana cost of all spells that come after it.\nEnabling this setting may alleviate some of this.",
+                -- ui_description = "Due to a technical limitation, the recharge time after using\nAlt Fire Everything does currently not consider the reload\ntimes of the spells it fires. As a workaround to make the\nreload time feel more natural, you can enable this option\nto scale the recharge time with the mana cost of the fired\nspells. When disabled, reload time is always 1 second.",
+                value_default = true,
+                scope = MOD_SETTING_SCOPE_RUNTIME,
             },
         },
     },

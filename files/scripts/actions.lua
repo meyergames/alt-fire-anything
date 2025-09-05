@@ -14,9 +14,10 @@ if ( actions ~= nil and ModIsEnabled("Apotheosis") ) then
 		    price               = 500,
 		    mana                = 1,
 		    action              = function()
-									current_reload_time = current_reload_time + 60
+									-- current_reload_time = current_reload_time + 60
 									if reflecting then return end
-									current_reload_time = current_reload_time - 70
+									-- current_reload_time = current_reload_time - 70
+									current_reload_time = current_reload_time - 10
 									
 									for i,v in ipairs( hand ) do
 										-- GamePrint( "mana cost of discarded hand card: " .. v.mana )

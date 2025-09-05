@@ -1,6 +1,9 @@
 -- REQUIRES APOTHEOSIS MOD INSTALLED
 
 dofile_once("mods/Apotheosis/lib/apotheosis/apotheosis_utils.lua")
+
+local config_recharge_scales_with_mana = ModSettingGet("alt_fire_anything.scale_recharge_time_with_mana_cost")
+
 local EZWand = dofile_once("mods/alt_fire_anything/files/scripts/lib/ezwand.lua")
 local entity_id = GetUpdatedEntityID()
 local root = EntityGetRootEntity(entity_id)
@@ -14,6 +17,8 @@ local variablecomp = EntityGetFirstComponentIncludingDisabled( entity_id, "Varia
 cooldown_frame = ComponentGetValue2( variablecomp, "value_int" )
 local aim_x, aim_y = ComponentGetValue2(controlscomp, "mAimingVectorNormalized")
 local manacost = 0
+
+local do_wrap = ModSettingGet("alt_fire_anything.wrap_payload")
 
 if GameGetFrameNum() >= cooldown_frame then
     if isButtonDown_AltFire() then
@@ -66,18 +71,32 @@ if GameGetFrameNum() >= cooldown_frame then
 		    end
         end
 
+        -- for k,v in pairs(spell_sequence) do
+        -- 	GamePrint( v )
+ 	   	-- end
+        if not do_wrap and #spell_sequence > spells_added then
+        	local seq_length = #spell_sequence
+        	GamePrint("old sequence: " .. seq_length .. "  |  spells_before: " .. spells_before)
+        	spell_sequence = { unpack( spell_sequence, 1, seq_length - spells_before ) }
+        	GamePrint("new sequence: " .. #spell_sequence)
+        end
+
     	if ( spells_added - spells_before > 0 and wand.mana >= total_mana_drain ) then
 			EZWand.ShootSpellSequenceInherit( spell_sequence, x+aim_x*12, y+aim_y*12, x+aim_x*20, y+aim_y*20, wand )
 			wand.mana = wand.mana - total_mana_drain
 
 			-- local action_cast_delay = ComponentObjectGetValue2( acomp, "gunaction_config", "fire_rate_wait" )
 			-- local action_recharge_time = ComponentObjectGetValue2( acomp, "gunaction_config", "reload_time" )
-			local wand_recharge_time = math.max( ComponentObjectGetValue2( acomp, "gun_config", "reload_time" ), 60 )
-			-- local total_recharge_time = action_recharge_time + wand_recharge_time
-	        ComponentSetValue2( acomp, "mNextFrameUsable", GameGetFrameNum() + wand_recharge_time )
-	        ComponentSetValue2( acomp, "mReloadNextFrameUsable", GameGetFrameNum() + wand_recharge_time )
-	        ComponentSetValue2( acomp, "mReloadFramesLeft", wand_recharge_time )
-	        ComponentSetValue2( acomp, "reload_time_frames", wand_recharge_time )
+			local wand_recharge_time = ComponentObjectGetValue2( acomp, "gun_config", "reload_time" )
+			local total_recharge_time = math.max( wand_recharge_time, 60 )
+			if config_recharge_scales_with_mana then
+				total_recharge_time = wand_recharge_time + ( total_mana_drain * 0.5 )
+			end
+			GamePrint("recharge time: " .. total_recharge_time)
+	        ComponentSetValue2( acomp, "mNextFrameUsable", GameGetFrameNum() + total_recharge_time )
+	        ComponentSetValue2( acomp, "mReloadNextFrameUsable", GameGetFrameNum() + total_recharge_time )
+	        ComponentSetValue2( acomp, "mReloadFramesLeft", total_recharge_time )
+	        ComponentSetValue2( acomp, "reload_time_frames", total_recharge_time )
 
 			ComponentSetValue2( variablecomp, "value_int", GameGetFrameNum() + wand_recharge_time )
 	        if HasFlagPersistent(actionid) == false then
