@@ -1626,20 +1626,21 @@ local function shoot_spell_sequence(sequence, from_x, from_y, target_x, target_y
   EntityAddComponent2(wand.entity_id, "LifetimeComponent", { lifetime = 1 })
 end
 
--- method with overhead to copy some stats off the player's wand
-local function shoot_spell_sequence_inherit(sequence, from_x, from_y, target_x, target_y, source_wand, herd)
+-- method with overhead to copy some stats off the player's wand, and make the wand truly invisible
+local function shoot_spell_sequence_inherit( sequence, from_x, from_y, target_x, target_y, source_wand, herd )
   local wand = create_virtual_wand({
     shuffle = false,
     spellsPerCast = source_wand.spellsPerCast,
     castDelay = 0,
     rechargeTime = 0,
     manaMax = 10000,
-    manaChargeSpeed = 100,
+    manaChargeSpeed = 0,
     capacity = #sequence,
     spread = source_wand.spread,
     speedMultiplier = source_wand.speedMultiplier
   }, from_x, from_y)
   wand.herd = herd
+  wand:SetSprite( "mods/alt_fire_anything/files/gfx/wand_placeholder.png", 0, 0, 0, 0 )
   wand.visible = false
   wand:AddSpells(sequence)
   wand:ShootAt(target_x, target_y)
