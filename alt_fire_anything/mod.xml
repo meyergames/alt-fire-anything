@@ -1,0 +1,6 @@
+<Mod
+	name="Alt Fire Anything"
+	description="Allows your wand to have two separate purposes, by putting\neverything to the right of this spell on a right-click trigger"
+    tags="gameplay,spells"
+    dont_upload_folders=".gitattributes"
+></Mod>
