@@ -1,29 +1,34 @@
--- REQUIRES APOTHEOSIS MOD INSTALLED
+dofile_once( "data/scripts/lib/utilities.lua" )
 
-dofile_once("mods/Apotheosis/lib/apotheosis/apotheosis_utils.lua")
-
--- local config_recharge_scales_with_mana = ModSettingGet("alt_fire_anything.scale_recharge_time_with_mana_cost")
+-- config variables
 local config_recharge_scales_with_mana = true
 local config_shared_recharge_time = ModSettingGet("alt_fire_anything.shared_recharge_time")
 local config_mana_cost_to_recharge_time = ModSettingGet("alt_fire_anything.mana_cost_to_recharge_time")
 local config_wrap_payload = ModSettingGet("alt_fire_anything.wrap_payload")
 
-local EZWand = dofile_once("mods/alt_fire_anything/files/scripts/lib/ezwand.lua")
+-- spell + player entity ids and transform
 local entity_id = GetUpdatedEntityID()
-local root = EntityGetRootEntity(entity_id)
-local wand = EZWand(EntityGetParent(entity_id))
-local x, y = EntityGetTransform(entity_id)
-local controlscomp = EntityGetFirstComponent(root, "ControlsComponent")
+local x, y = EntityGetTransform( entity_id )
+local owner = EntityGetRootEntity( entity_id )
+
+-- spell + player component entity ids
+local var_comp = EntityGetFirstComponentIncludingDisabled( entity_id, "VariableStorageComponent" )
+local ctrl_comp = EntityGetFirstComponent( owner, "ControlsComponent" )
+
+-- wand variables
+local actionid = "action_alt_fire_anything"
+local aim_x, aim_y = ComponentGetValue2( ctrl_comp, "mAimingVectorNormalized")
 local cooldown_frames = 60
-local actionid = "action_d2d_alt_fire_anything"
-local cooldown_frame
-local variablecomp = EntityGetFirstComponentIncludingDisabled( entity_id, "VariableStorageComponent" )
-cooldown_frame = ComponentGetValue2( variablecomp, "value_int" )
-local aim_x, aim_y = ComponentGetValue2(controlscomp, "mAimingVectorNormalized")
+local cooldown_frame = ComponentGetValue2( var_comp, "value_int" )
 local manacost = 0
 
+-- ezwand
+local EZWand = dofile_once( "mods/alt_fire_anything/files/scripts/lib/ezwand.lua" )
+local wand = EZWand(EntityGetParent(entity_id))
+
+-- spell logic
 if GameGetFrameNum() >= cooldown_frame then
-    if isButtonDown_AltFire() then
+    if InputIsMouseButtonDown( 2 ) then -- is the right mouse button pressed?
         local mana = wand.mana
         local spells_left_to_add = wand.spellsPerCast
 
@@ -32,7 +37,7 @@ if GameGetFrameNum() >= cooldown_frame then
     	local spells_before = 0
 		local acomp = EntityGetFirstComponentIncludingDisabled( wand.entity_id, "AbilityComponent" )
 		local next_usable_frame = ComponentGetValue2( acomp, "mReloadNextFrameUsable" )
-		if ( GameGetFrameNum() < next_usable_frame ) then return end -- return if the wand is reloading
+		if ( GameGetFrameNum() < next_usable_frame and config_shared_recharge_time ) then return end -- cancel if the wand is reloading
 
 		local afa_index = 999
 		if config_wrap_payload then afa_index = -1 end -- this seems to enable wrapping... interesting!
@@ -66,21 +71,6 @@ if GameGetFrameNum() >= cooldown_frame then
 			        	if uses_remaining > 0 then
 	                    	ComponentSetValue2( icomp, "uses_remaining", uses_remaining - 1 )
 	                    end
-
-				        ---- this was an attempt to add only the spells that can actually be cast to the virtual wand, so that
-				        ---- the total mana cost could be more accurate. alas...
-				        -- local spell_has_trigger = string.find( spell_data.id, "TRIGGER" )
-				        -- local spell_is_modifier = spell_data.type == ACTION_TYPE_MODIFIER
-				        -- local spell_is_multicast = spell_data.type == ACTION_TYPE_DRAW_MANY
-				        -- local spell_is_passive = spell_data.type == ACTION_TYPE_PASSIVE
-				        -- local spell_is_other = spell_data.type == ACTION_TYPE_OTHER
-				        -- if not ( spell_has_trigger or spell_is_modifier or spell_is_multicast or spell_is_passive or spell_is_other ) then
-				        -- 	spells_left_to_add = spells_left_to_add - 1
-				        -- 	if spells_left_to_add <= 0 then
-				        -- 		GamePrint("BREAK")
-				        -- 		break
-				        -- 	end
-				        -- end
                     else
                     	break
 		        	end
@@ -90,13 +80,6 @@ if GameGetFrameNum() >= cooldown_frame then
 		        end
 		    end
         end
-
-        -- if not config_wrap_payload and #spell_sequence > spells_added then
-        -- 	local seq_length = #spell_sequence
-        -- 	GamePrint("old sequence: " .. seq_length .. "  |  spells_before: " .. spells_before)
-        -- 	spell_sequence = { unpack( spell_sequence, 1, seq_length - spells_before ) }
-        -- 	GamePrint("new sequence: " .. #spell_sequence)
-        -- end
 
         local were_spells_added = spells_added > 0
         if config_wrap_payload then
@@ -122,13 +105,13 @@ if GameGetFrameNum() >= cooldown_frame then
 		        ComponentSetValue2( acomp, "reload_time_frames", total_recharge_time )
 		    end
 
-			ComponentSetValue2( variablecomp, "value_int", GameGetFrameNum() + total_recharge_time )
-	        if HasFlagPersistent(actionid) == false then
-	            GameAddFlagRun(table.concat({"new_",actionid}))
-	            AddFlagPersistent(actionid)
+			ComponentSetValue2( var_comp, "value_int", GameGetFrameNum() + total_recharge_time )
+	        if HasFlagPersistent( actionid ) == false then
+	            GameAddFlagRun( table.concat( { "new_", actionid } ) )
+	            AddFlagPersistent( actionid )
 	        end
             -- if ModIsEnabled("quant.ew") then
-            --     CrossCall("afa_ew_alt_fire", root, x, y, aim_x, aim_y, "???.xml")
+            --     CrossCall("afa_ew_alt_fire", owner, x, y, aim_x, aim_y, "???.xml")
             -- end=
 	    end
     end

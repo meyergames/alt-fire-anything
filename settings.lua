@@ -43,7 +43,7 @@ mod_settings =
             {
                 id = "wrap_payload",
                 ui_name = "Wrap payload",
-                ui_description = "Makes \"Alt Fire Anything\" wrap around your wand's spell slots in search\nfor spells to add to its payload, at the cost of considerably more mana.",
+                ui_description = "Makes \"Alt Fire Anything\" wrap around your wand's spell slots in search\nfor spells to add to its payload, at the cost of considerably more mana\n(and thus recharge time).",
                 value_default = false,
                 scope = MOD_SETTING_SCOPE_RUNTIME,
             },

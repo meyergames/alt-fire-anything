@@ -12,7 +12,7 @@ if ( actions ~= nil and ModIsEnabled("Apotheosis") ) then
 			custom_xml_file 	= "mods/alt_fire_anything/files/entities/card_alt_fire_anything.xml",
 			-- spawn_requires_flag = "card_unlocked_alt_fire_anything",
 		    price               = 500,
-		    mana                = 1,
+		    mana                = 10,
 		    action              = function()
 									-- current_reload_time = current_reload_time + 60
 									if reflecting then return end
