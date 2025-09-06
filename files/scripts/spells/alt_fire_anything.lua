@@ -54,8 +54,6 @@ if GameGetFrameNum() >= cooldown_frame then
 				for k,v in pairs( actions ) do
 					if ( v.id == spells[i].action_id ) then
 						spell_data = v
-						-- GamePrint( tostring(v.gunaction_config) ) -- would be nice to incur the correct cast delay and recharge time
-						-- after the alt-fire action, but getting those stats from the actions seems impossible as of my current understanding
 					end
 				end
 
@@ -68,8 +66,17 @@ if GameGetFrameNum() >= cooldown_frame then
 		        		spell_sequence[i-afa_index] = spells[i].action_id
 		        		spells_added = spells_added + 1
 
+						-- total_cast_delay = total_cast_delay + ComponentObjectGetValue2( acomp, "gunaction_config", "fire_rate_wait" )
+						-- total_recharge_time = total_recharge_time + ComponentObjectGetValue2( acomp, "gunaction_config", "reload_time" )
+						-- -- would be nice to incur the correct cast delay and recharge time after AFA is triggered,
+						-- -- but getting those stats from the actions seems impossible as of my current understanding ;(
+
 			        	if uses_remaining > 0 then
 	                    	ComponentSetValue2( icomp, "uses_remaining", uses_remaining - 1 )
+
+	                    	if uses_remaining - 1 <= 0 then
+		                        GamePlaySound( "data/audio/Desktop/items.bank", "magic_wand/action_consumed", x, y );
+		                    end
 	                    end
                     else
                     	break
@@ -90,8 +97,6 @@ if GameGetFrameNum() >= cooldown_frame then
 			EZWand.ShootSpellSequenceInherit( spell_sequence, x+aim_x*12, y+aim_y*12, x+aim_x*20, y+aim_y*20, wand )
 			wand.mana = wand.mana - total_mana_drain
 
-			-- local action_cast_delay = ComponentObjectGetValue2( acomp, "gunaction_config", "fire_rate_wait" )
-			-- local action_recharge_time = ComponentObjectGetValue2( acomp, "gunaction_config", "reload_time" )
 			local wand_recharge_time = ComponentObjectGetValue2( acomp, "gun_config", "reload_time" )
 			local total_recharge_time = math.max( wand_recharge_time, 60 )
 			if config_recharge_scales_with_mana then
