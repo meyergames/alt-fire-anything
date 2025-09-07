@@ -16,12 +16,19 @@ mod_settings =
                 value_default = false,
                 scope = MOD_SETTING_SCOPE_NEW_GAME,
             },
+            {
+                id = "disable_other_alt_fire_spells",
+                ui_name = "Disable other Alt Fire spells",
+                ui_description = "Cleans up the spell pool by attempting to disable\nother mods' Alt Fire spells, since their regular\nvariants can now be put behind Alt Fire Anything.",
+                value_default = false,
+                scope = MOD_SETTING_SCOPE_NEW_GAME,
+            },
         }
     },
     {
         category_id = "experimental_settings",
         ui_name = "Experimental",
-        ui_description = "",
+        ui_description = "Settings that change the spell's variables",
         settings = {
             {
                 id = "shared_recharge_time",
@@ -33,7 +40,7 @@ mod_settings =
             {
                 id = "mana_cost_to_recharge_time",
                 ui_name = "Mana cost : Recharge time",
-                ui_description = "How much the mana cost of alt-fired spells\naffects the recharge time of \"Alt Fire Anything\".",
+                ui_description = "How much the mana cost of alt-fired spells\naffects the recharge time of \"Alt Fire Anything\".\n(100% seems most balanced)",
                 value_default = 100,
                 value_min = 0,
                 value_max = 100,

@@ -13,24 +13,24 @@ afa = {
 	    price               = 500,
 	    mana                = 10,
 	    action              = function()
-								-- current_reload_time = current_reload_time + 60
 								if reflecting then return end
-								-- current_reload_time = current_reload_time - 70
-								current_reload_time = current_reload_time - 10
 								
 								for i,v in ipairs( hand ) do
 									table.insert( discarded, v )
 								end
-								
+
 								for i,v in ipairs( deck ) do
 									table.insert( discarded, v )
 								end
-								
+
 								hand = {}
 								deck = {}
-								
+
 								if ( force_stop_draws == false ) then
 									force_stop_draws = true
+									move_discarded_to_deck()
+									draw_actions( 1, true )
+									start_reload = true
 								end
 	                        end,
     },
@@ -39,5 +39,13 @@ afa = {
 if ( actions ~= nil ) then
     for k, v in pairs( afa ) do
 	    table.insert( actions, v )
+    end
+
+    if ModSettingGet( "alt_fire_anything.disable_other_alt_fire_spells" ) then
+	    for k, v in pairs( actions ) do
+	    	if string.find( v.id, "ALT_FIRE" ) and not string.find( v.id, "ALT_FIRE_ANYTHING" ) then
+		    	table.remove( actions, k )
+		    end
+	    end
     end
 end
