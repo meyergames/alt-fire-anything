@@ -1,6 +1,5 @@
 <Mod
 	name="Alt Fire Anything"
-	description="Allows your wand to have two separate purposes, by putting everything\nto the right of this spell on a right-click trigger.\nThis mod is technically in beta; feedback and/or technical help is appreciated :)"
-    tags="gameplay,spells"
-    dont_upload_files=".gitattributes"
+	description="Split your wands in two! This passive spell allows you to\nput any spell (combo) on your right mouse button."
+	tags="gameplay,spells"
 ></Mod>

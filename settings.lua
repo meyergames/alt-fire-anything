@@ -33,14 +33,14 @@ mod_settings =
             {
                 id = "shared_recharge_time",
                 ui_name = "Shared recharge time",
-                ui_description = "While using \"Alt Fire Anything\" with this setting enabled, your\nwand's normal and alt fire payloads share the same recharge time.",
+                ui_description = "While using Alt Fire Anything with this setting enabled, your\nwand's normal and alt fire payloads share the same recharge time.",
                 value_default = true,
                 scope = MOD_SETTING_SCOPE_RUNTIME,
             },
             {
                 id = "mana_cost_to_recharge_time",
                 ui_name = "Mana cost : Recharge time",
-                ui_description = "How much the mana cost of alt-fired spells\naffects the recharge time of \"Alt Fire Anything\".\n(100% seems most balanced)",
+                ui_description = "How much the mana cost of alt-fired spells\naffects the recharge time of Alt Fire Anything.\n(100% seems most balanced)",
                 value_default = 100,
                 value_min = 0,
                 value_max = 100,
@@ -50,7 +50,7 @@ mod_settings =
             {
                 id = "wrap_payload",
                 ui_name = "Wrap payload",
-                ui_description = "Makes \"Alt Fire Anything\" wrap around your wand's spell slots in search\nfor spells to add to its payload, at the cost of considerably more mana\n(and thus recharge time).",
+                ui_description = "Makes Alt Fire Anything wrap around your wand's spell slots in search\nfor spells to add to its payload, at the cost of considerably more mana\n(and thus recharge time).",
                 value_default = false,
                 scope = MOD_SETTING_SCOPE_RUNTIME,
             },
