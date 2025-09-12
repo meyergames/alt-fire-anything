@@ -1,6 +1,6 @@
 <Entity>
 	<Base file="data/entities/base_custom_card.xml">
-		<SpriteComponent image_file="mods/alt_fire_anything/files/gfx/alt_fire.png" />
+		<SpriteComponent image_file="mods/alt_fire_anything/files/gfx/alt_fire_anything.png" />
 		<ItemActionComponent _tags="enabled_in_world" action_id="ND2D_ALT_FIRE_ANYTHING" />
 	</Base>
 
