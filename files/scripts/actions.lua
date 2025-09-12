@@ -32,7 +32,7 @@ if ( actions ~= nil ) then
 
     if ModSettingGet( "alt_fire_anything.disable_other_alt_fire_spells" ) then
 	    for k, v in pairs( actions ) do
-	    	if string.find( v.id, "ALT_FIRE" ) and not v.id == "ALT_FIRE_ANYTHING" then
+	    	if string.find( v.id, "ALT_FIRE" ) and not v.id == "ND2D_ALT_FIRE_ANYTHING" then
 		    	table.remove( actions, k )
 		    end
 	    end
