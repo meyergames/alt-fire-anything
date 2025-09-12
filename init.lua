@@ -23,11 +23,11 @@ function OnPlayerSpawned(_)
     end
 
     -- spawn a guaranteed "Alt Fire Anything" card in the orb room next to the early magical temple
-    CreateItemActionEntity( "ALT_FIRE_ANYTHING", -4324, 3859 )
+    CreateItemActionEntity( "ND2D_ALT_FIRE_ANYTHING", -4324, 3859 )
 
     -- if the player enabled this mod setting, also spawn a copy at the mountain entrance
     if ( config_spawn_at_start ) then
-        CreateItemActionEntity( "ALT_FIRE_ANYTHING", 800, -100 )
+        CreateItemActionEntity( "ND2D_ALT_FIRE_ANYTHING", 800, -100 )
     end
 end
 

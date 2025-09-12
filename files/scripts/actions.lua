@@ -1,6 +1,6 @@
 afa = {
     {
-	    id                  = "ALT_FIRE_ANYTHING",
+	    id                  = "ND2D_ALT_FIRE_ANYTHING",
 	    name 		        = "$spell_alt_fire_anything_name",
 	    description         = "$spell_alt_fire_anything_desc",
 	    sprite 		        = "mods/alt_fire_anything/files/gfx/alt_fire_anything.png",

@@ -15,7 +15,7 @@ _draw_actions_for_shot = function(...)
 				local data = deck[1]
 				table.insert(discarded, data)
 				table.remove(deck, 1)
-				if data.id == "ALT_FIRE_ANYTHING" then break end
+				if data.id == "ND2D_ALT_FIRE_ANYTHING" then break end
 			end
 		else
 			error("unknown cause of alt fire")
