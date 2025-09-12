@@ -14,7 +14,7 @@ mod_settings =
                 ui_name = "Spawn at start",
                 ui_description = "Spawns a copy of the spell at the mountain entrance.\nUseful if you just want to try it out.",
                 value_default = false,
-                scope = MOD_SETTING_SCOPE_NEW_GAME,
+                scope = MOD_SETTING_SCOPE_RESTART,
             },
             {
                 id = "disable_other_alt_fire_spells",

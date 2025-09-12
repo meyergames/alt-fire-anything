@@ -21,9 +21,12 @@ function OnPlayerSpawned(_)
     for _, message in ipairs(messages) do
         _print(message)
     end
-
-    -- spawn a guaranteed "Alt Fire Anything" card in the orb room next to the early magical temple
-    CreateItemActionEntity( "ND2D_ALT_FIRE_ANYTHING", -4324, 3859 )
+    
+    if ( GameHasFlagRun( "alt_fire_anything_spawned" ) == false ) then
+        -- spawn a guaranteed "Alt Fire Anything" card in the orb room next to the early magical temple
+        CreateItemActionEntity( "ND2D_ALT_FIRE_ANYTHING", -4324, 3859 )
+        GameAddFlagRun( "alt_fire_anything_spawned" )
+    end
 
     -- if the player enabled this mod setting, also spawn a copy at the mountain entrance
     if ( config_spawn_at_start ) then
