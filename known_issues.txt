@@ -1,3 +1,0 @@
-- Alt Fire Anything currently drains mana for all spells ahead of it, not just for the ones actually fired. makes wrapping not worthwhile
-- cast delay and recharge time are not properly applied for alt-fired spells
-- recoil knockback is not applied for alt-fired spells

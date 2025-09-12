@@ -1,8 +1,27 @@
-ModLuaFileAppend("data/scripts/gun/gun_actions.lua", "mods/alt_fire_anything/files/scripts/actions.lua")
+ModLuaFileAppend( "data/scripts/gun/gun_actions.lua", "mods/alt_fire_anything/files/scripts/actions.lua" )
+ModLuaFileAppend( "data/scripts/gun/gun.lua", "mods/alt_fire_anything/files/scripts/gun_append.lua" )
 
 local config_spawn_at_start = ModSettingGet("alt_fire_anything.spawn_at_start")
 
-function OnPlayerSpawned(player)
+local messages = {}
+local _print = print
+---@diagnostic disable-next-line: unused-function
+local function print(...)
+    local s = ""
+    for _, v in ipairs({ ... }) do
+        s = s .. tostring(v) .. "\t"
+    end
+    -- why did it lose the type??
+    ---@cast s string
+    table.insert(messages, s:sub(1, s:len() - 1))
+end
+
+---@type OnPlayerSpawned
+function OnPlayerSpawned(_)
+    for _, message in ipairs(messages) do
+        _print(message)
+    end
+
     -- spawn a guaranteed "Alt Fire Anything" card in the orb room next to the early magical temple
     CreateItemActionEntity( "ALT_FIRE_ANYTHING", -4324, 3859 )
 
@@ -11,8 +30,6 @@ function OnPlayerSpawned(player)
         CreateItemActionEntity( "ALT_FIRE_ANYTHING", 800, -100 )
     end
 end
-
-
 
 local translations = ModTextFileGetContent("data/translations/common.csv")
 local new_translations = ModTextFileGetContent("mods/alt_fire_anything/translations.csv")

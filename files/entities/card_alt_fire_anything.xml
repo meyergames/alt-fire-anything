@@ -1,31 +1,15 @@
 <Entity>
-	
-	<Base file="data/entities/base_custom_card.xml" > 
-		<SpriteComponent 
-			image_file="mods/alt_fire_anything/files/gfx/alt_fire_anything.png"
-			>
-		</SpriteComponent>
-		
-		<ItemActionComponent 
-			_tags="enabled_in_world"
-			action_id="ALT_FIRE_ANYTHING" >
-		</ItemActionComponent>
+	<Base file="data/entities/base_custom_card.xml">
+		<SpriteComponent image_file="mods/nathan-alt_fire/files/sprites/alt_fire.png" />
+		<ItemActionComponent _tags="enabled_in_world" action_id="ALT_FIRE_ANYTHING" />
 	</Base>
 
-	<InheritTransformComponent
-		_tags="enabled_in_world,enabled_in_hand" >
+	<InheritTransformComponent _tags="enabled_in_world,enabled_in_hand">
+		<Transform position.x="8" position.y="0" />
 	</InheritTransformComponent>
 
-	<LuaComponent 
+	<LuaComponent
 		_tags="enabled_in_hand"
-        script_source_file="mods/alt_fire_anything/files/scripts/spells/alt_fire_anything.lua"
-		execute_every_n_frame="1" >
-	</LuaComponent>
-
-    <VariableStorageComponent
-		_tags="enabled_in_hand"
-        name="cooldown_frame"
-        value_int="0"
-        >
-    </VariableStorageComponent>
+		script_source_file="mods/alt_fire_anything/files/scripts/alt_fire_anything.lua"
+		execute_every_n_frame="1" />
 </Entity>
