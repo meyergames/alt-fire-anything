@@ -442,8 +442,10 @@ mod_settings =
             {
                 id = "spawn_at_start",
                 ui_name = "Spawn at start",
-                ui_description = "Spawns a copy of the spell at the mountain entrance.\nUseful if you just want to try it out.",
-                value_default = false,
+                ui_description = "Spawns this many copies of the spell at the mountain\nentrance. Useful if you just want to try it out.",
+                value_default = 0,
+                value_min = 0,
+                value_max = 4,
                 scope = MOD_SETTING_SCOPE_RESTART,
             },
             {
