@@ -5,13 +5,11 @@ afa = {
 	    description         = "$spell_alt_fire_anything_desc",
 	    sprite 		        = "mods/alt_fire_anything/files/gfx/alt_fire_anything.png",
 	    type 		        = ACTION_TYPE_PASSIVE,
-        subtype     		= { altfire = true },
 		spawn_level         = "1,2,3,4,5,6,10",
 		spawn_probability   = "0.2,0.4,0.6,0.8,1,1,1",
 		custom_xml_file 	= "mods/alt_fire_anything/files/entities/card_alt_fire_anything.xml",
-		-- spawn_requires_flag = "card_unlocked_alt_fire_anything",
 	    price               = 400,
-	    mana                = 10,
+	    mana                = 1,
 		action 				= function()
 								while #deck > 0 do
 									local data = deck[1]
