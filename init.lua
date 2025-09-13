@@ -36,7 +36,7 @@ function OnPlayerSpawned(_)
 
     -- if the player enabled this mod setting, also spawn a copy at the mountain entrance
     if ( config_spawn_at_start > 0 ) then
-        for i=1,config_spawn_at_start do
+        for i=1, math.floor( config_spawn_at_start + 0.5 ) do
             CreateItemActionEntity( "ND2D_ALT_FIRE_ANYTHING", 800, -100 )
         end
     end

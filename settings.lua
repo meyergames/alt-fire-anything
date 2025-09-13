@@ -446,7 +446,7 @@ mod_settings =
                 value_default = 0,
                 value_min = 0,
                 value_max = 4,
-                scope = MOD_SETTING_SCOPE_RESTART,
+                scope = MOD_SETTING_SCOPE_NEW_GAME,
             },
             {
                 id = "disable_other_alt_fire_spells",
