@@ -25,6 +25,12 @@ function OnPlayerSpawned(_)
     if ( GameHasFlagRun( "alt_fire_anything_spawned" ) == false ) then
         -- spawn a guaranteed "Alt Fire Anything" card in the orb room next to the early magical temple
         CreateItemActionEntity( "ND2D_ALT_FIRE_ANYTHING", -4324, 3859 )
+
+        -- spawn a guaranteed 3x "Alt Fire Anything" in the orb room near Mestarien Mestari
+        for i=1, 3 do
+            CreateItemActionEntity( "ND2D_ALT_FIRE_ANYTHING", 10512 + ( i * 5 ), 16160 )
+        end
+
         GameAddFlagRun( "alt_fire_anything_spawned" )
     end
 
