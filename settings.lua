@@ -442,7 +442,7 @@ mod_settings =
             {
                 id = "spawn_at_start",
                 ui_name = "Spawn at start",
-                ui_description = "Spawns this many copies of the spell at the mountain\nentrance. Useful if you just want to try it out.",
+                ui_description = "Spawns this many copies of the spell at the mountain\nentrance. Recommended value is 1.",
                 value_default = 0,
                 value_min = 0,
                 value_max = 4,

@@ -1,7 +1,7 @@
 ModLuaFileAppend( "data/scripts/gun/gun_actions.lua", "mods/alt_fire_anything/files/scripts/actions.lua" )
 ModLuaFileAppend( "data/scripts/gun/gun.lua", "mods/alt_fire_anything/files/scripts/gun_append.lua" )
 
-local config_spawn_at_start = ModSettingGet("alt_fire_anything.spawn_at_start")
+local config_spawn_at_start = ModSettingGet( "alt_fire_anything.spawn_at_start" )
 
 local messages = {}
 local _print = print
@@ -17,24 +17,22 @@ local function print(...)
 end
 
 ---@type OnPlayerSpawned
-function OnPlayerSpawned(_)
+function OnPlayerSpawned( player )
+    if GameHasFlagRun( "nd2d_afa_init_happened" ) then return end
+    GameAddFlagRun( "nd2d_afa_init_happened" )
+
     for _, message in ipairs(messages) do
         _print(message)
     end
-    
-    if ( GameHasFlagRun( "alt_fire_anything_spawned" ) == false ) then
-        -- spawn a guaranteed "Alt Fire Anything" card in the orb room next to the early magical temple
-        CreateItemActionEntity( "ND2D_ALT_FIRE_ANYTHING", -4324, 3859 )
 
-        -- spawn a guaranteed 3x "Alt Fire Anything" in the orb room near Mestarien Mestari
-        for i=1, 3 do
-            CreateItemActionEntity( "ND2D_ALT_FIRE_ANYTHING", 10512 + ( i * 5 ), 16160 )
-        end
+    -- add a script that tries to spawn copies of the spell where they belong
+    EntityAddComponent2( player, "LuaComponent", 
+    {
+        script_source_file = "mods/alt_fire_anything/files/scripts/player_try_spawn_copies.lua",
+        execute_every_n_frame = 60,
+    } )
 
-        GameAddFlagRun( "alt_fire_anything_spawned" )
-    end
-
-    -- if the player enabled this mod setting, also spawn a copy at the mountain entrance
+    -- if enabled in mod settings, also spawn copies at the mountain entrance
     if ( config_spawn_at_start > 0 ) then
         for i=1, math.floor( config_spawn_at_start + 0.5 ) do
             CreateItemActionEntity( "ND2D_ALT_FIRE_ANYTHING", 800, -100 )
