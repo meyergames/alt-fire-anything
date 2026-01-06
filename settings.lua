@@ -440,6 +440,13 @@ mod_settings =
         ui_description = "",
         settings = {
             {
+                id = "enable_in_inventory",
+                ui_name = "Enable while inventory is open",
+                ui_description = "When enabled, Alt Fire Anything will function even\nwhen the inventory is opened.",
+                value_default = false,
+                scope = MOD_SETTING_SCOPE_RUNTIME,
+            },
+            {
                 id = "spawn_at_start",
                 ui_name = "Spawn at start",
                 ui_description = "Spawns this many copies of the spell at the mountain\nentrance. Recommended value is 1.",

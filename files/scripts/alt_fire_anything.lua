@@ -31,6 +31,7 @@ end
 local alt_fire_pressed = is_alt_fire_pressed()
 local always_enable_right_click = ModSettingGet( "alt_fire_anything.always_enable_right_click" )
 if alt_fire_pressed or ( always_enable_right_click and InputIsMouseButtonDown( 2 ) ) then
+  if not ModSettingGet( "alt_fire_anything.enable_in_inventory" ) and GameIsInventoryOpen() then return end
 
   local platform_shooter = EntityGetFirstComponent(caster, "PlatformShooterPlayerComponent")
   if not platform_shooter then return end
